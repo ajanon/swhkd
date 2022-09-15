@@ -197,13 +197,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let mut execution_is_paused = false;
     let mut last_hotkey: Option<config::Hotkey> = None;
     let mut pending_release: bool = false;
-    let mut keyboard_states: Vec<KeyboardState> = Vec::new();
+    let mut keyboard_state = KeyboardState::new();
     let mut keyboard_stream_map = StreamMap::new();
 
     for (i, mut device) in keyboard_devices.into_iter().enumerate() {
         let _ = device.grab();
         keyboard_stream_map.insert(i, device.into_event_stream()?);
-        keyboard_states.push(KeyboardState::new());
     }
 
     // The initial sleep duration is never read because last_hotkey is initialized to None
@@ -264,9 +263,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 }
             }
 
-            Some((i, Ok(event))) = keyboard_stream_map.next() => {
-                let keyboard_state = &mut keyboard_states[i];
-
+            Some((_, Ok(event))) = keyboard_stream_map.next() => {
                 let key = match event.kind() {
                     InputEventKind::Key(keycode) => keycode,
                     _ => continue

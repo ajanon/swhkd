@@ -433,6 +433,8 @@ pub fn parse_contents(path: PathBuf, contents: String) -> Result<Vec<Mode>, Erro
         ("f22", evdev::Key::KEY_F22),
         ("f23", evdev::Key::KEY_F23),
         ("f24", evdev::Key::KEY_F24),
+        ("buttonleft", evdev::Key::BTN_LEFT),
+        ("buttonright", evdev::Key::BTN_RIGHT),
     ]);
 
     // Don't forget to update modifier list on the man page if you do change this list.
